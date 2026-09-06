@@ -77,11 +77,12 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
     if (!ctxGuia) return;
     ctxGuia.clearRect(0, 0, canvasGuia.width, canvasGuia.height);
     puntosGuia.forEach((p) => {
+      if (p.cubierto) return; // ya trazado: el puntito desaparece y solo queda tu dibujo
       const x = p.u * canvasGuia.width;
       const y = p.v * canvasGuia.height;
       ctxGuia.beginPath();
       ctxGuia.arc(x, y, 3.5, 0, Math.PI * 2);
-      ctxGuia.fillStyle = p.cubierto ? '#2dd4a7' : 'rgba(255,92,138,0.55)';
+      ctxGuia.fillStyle = 'rgba(255,92,138,0.55)';
       ctxGuia.fill();
     });
   }
