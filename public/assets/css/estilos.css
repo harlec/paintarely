@@ -180,14 +180,49 @@ h1, h2 { font-family: 'Fredoka', 'Quicksand', sans-serif; }
 }
 .capa-svg svg { width: 100%; height: 100%; display: block; }
 
-.controles, .paleta { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
-.paleta {
+.controles { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: center; }
+
+.herramientas {
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  align-items: center;
   background: var(--blanco);
-  padding: 1rem;
-  border-radius: 1.2rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 1.5rem;
   box-shadow: 0 8px 20px rgba(184,164,255,.18);
+  width: min(90vw, 480px);
 }
-.paleta p { width: 100%; margin: 0 0 .3rem; font-weight: 700; color: var(--texto-suave); }
+
+.pinceles { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
+.pincel-btn {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border-radius: 50%;
+  background: #f4f0ff;
+  box-shadow: inset 0 0 0 2px #ece4ff;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--texto);
+}
+.pincel-btn:hover { transform: scale(1.08); box-shadow: inset 0 0 0 2px var(--menta); }
+.pincel-btn.activo {
+  background: linear-gradient(135deg, var(--lila), var(--rosa));
+  box-shadow: 0 0 0 3px var(--lila-fuerte), 0 4px 10px rgba(0,0,0,.15);
+}
+
+.pista {
+  text-align: center;
+  font-weight: 700;
+  color: var(--lila-fuerte);
+  background: #f4f0ff;
+  padding: .5rem 1rem;
+  border-radius: 999px;
+  margin: 0;
+}
 
 button {
   padding: .7rem 1.3rem;
@@ -220,3 +255,28 @@ button:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow:
 }
 .swatch:hover { transform: scale(1.15); }
 .swatch.activo { box-shadow: 0 0 0 3px var(--lila-fuerte), 0 4px 10px rgba(0,0,0,.15); transform: scale(1.1); }
+
+.swatch-personalizado {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: conic-gradient(from 180deg, #ffb3c6, #ffd8a8, #fff3a0, #b9f5d0, #a8e6ff, #c9b8ff, #ffb3c6);
+}
+.swatch-personalizado::after {
+  content: '🎨';
+  font-size: .95rem;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.25));
+}
+.swatch-personalizado input[type="color"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}

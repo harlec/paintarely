@@ -1,25 +1,39 @@
+window.PaintarelyEstado = window.PaintarelyEstado || {
+  color: '#4a3f5c',
+  pincel: { grosor: 4, alfa: 1, modo: 'lapiz' },
+};
+
 (function () {
   const capas = document.getElementById('lienzoCapas');
   const capaSvg = document.getElementById('capaSvg');
-  const paleta = document.getElementById('paletaColores');
+  const swatches = document.getElementById('paletaSwatches');
+  const colorPersonalizado = document.getElementById('colorPersonalizado');
   const btnGuardar = document.getElementById('btnGuardarDibujo');
-  if (!capas || !capaSvg || !paleta) return;
+  if (!capas || !capaSvg || !swatches) return;
 
-  let colorActivo = null;
+  const estado = window.PaintarelyEstado;
 
-  paleta.addEventListener('click', (evento) => {
-    const swatch = evento.target.closest('.swatch');
+  function marcarActivo(elemento) {
+    swatches.querySelectorAll('.swatch').forEach((s) => s.classList.remove('activo'));
+    elemento.classList.add('activo');
+  }
+
+  swatches.addEventListener('click', (evento) => {
+    const swatch = evento.target.closest('.swatch:not(.swatch-personalizado)');
     if (!swatch) return;
-    document.querySelectorAll('.swatch').forEach((s) => s.classList.remove('activo'));
-    swatch.classList.add('activo');
-    colorActivo = swatch.dataset.color;
+    estado.color = swatch.dataset.color;
+    marcarActivo(swatch);
+  });
+
+  colorPersonalizado?.addEventListener('input', (evento) => {
+    estado.color = evento.target.value;
+    marcarActivo(colorPersonalizado.closest('.swatch'));
   });
 
   capaSvg.addEventListener('click', (evento) => {
-    if (!colorActivo) return;
     const zona = evento.target.closest('.zona-color');
     if (!zona) return;
-    zona.setAttribute('fill', colorActivo);
+    zona.setAttribute('fill', estado.color);
   });
 
   btnGuardar?.addEventListener('click', async () => {
@@ -57,10 +71,12 @@
       if (resultado.ok) {
         btnGuardar.textContent = '¡Guardado!';
       } else {
+        btnGuardar.disabled = false;
         btnGuardar.textContent = 'Error al guardar';
         console.error(resultado.error);
       }
     } catch (error) {
+      btnGuardar.disabled = false;
       btnGuardar.textContent = 'Error al guardar';
       console.error(error);
     }

@@ -20,20 +20,30 @@
     <canvas class="capa-dibujo" id="canvasDibujo"></canvas>
   </div>
 
-  <div class="controles">
-    <button id="btnFinalizarTrazo">Finalizar trazo</button>
-    <button id="btnLimpiar" type="button">Limpiar</button>
+  <div class="herramientas">
+    <div class="pinceles" id="pinceles">
+      <button type="button" class="pincel-btn activo" data-grosor="4" data-alfa="1" data-modo="lapiz" title="Lápiz fino">✏️</button>
+      <button type="button" class="pincel-btn" data-grosor="10" data-alfa="1" data-modo="lapiz" title="Marcador grueso">🖊️</button>
+      <button type="button" class="pincel-btn" data-grosor="18" data-alfa="0.45" data-modo="lapiz" title="Crayón suave">🖍️</button>
+      <button type="button" class="pincel-btn" data-grosor="22" data-alfa="1" data-modo="borrador" title="Borrador">🧽</button>
+    </div>
+
+    <div class="paleta-swatches" id="paletaSwatches">
+      <?php foreach (['#ffb3c6', '#ffd8a8', '#fff3a0', '#b9f5d0', '#a8e6ff', '#c9b8ff', '#ffffff', '#4a3f5c'] as $indice => $color): ?>
+        <button type="button" class="swatch<?= $indice === 0 ? ' activo' : '' ?>" style="background: <?= $color ?>" data-color="<?= $color ?>"></button>
+      <?php endforeach; ?>
+      <label class="swatch swatch-personalizado" title="Elige cualquier color">
+        <input type="color" id="colorPersonalizado" value="#ffb3c6" aria-label="Color personalizado">
+      </label>
+    </div>
   </div>
 
-  <div class="paleta" id="paletaColores" hidden>
-    <p>Elige un color y toca una zona para colorear:</p>
-    <div class="paleta-swatches">
-      <?php foreach (['#e63946', '#f1a208', '#ffe066', '#2a9d8f', '#264653', '#8338ec', '#ffffff'] as $color): ?>
-        <button class="swatch" style="background: <?= $color ?>" data-color="<?= $color ?>" type="button"></button>
-      <?php endforeach; ?>
-    </div>
-    <button id="btnGuardarDibujo">Guardar dibujo</button>
+  <div class="controles">
+    <button id="btnFinalizarTrazo" type="button">Finalizar trazo</button>
+    <button id="btnLimpiar" type="button">Limpiar</button>
+    <button id="btnGuardarDibujo" type="button" disabled>Guardar dibujo</button>
   </div>
+  <p class="pista" id="pistaColorear" hidden>Toca una zona del dibujo para colorearla ✨</p>
 </main>
 
 <script src="/assets/js/canvas-draw.js"></script>
