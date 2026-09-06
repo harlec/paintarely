@@ -170,8 +170,8 @@ h1, h2 { font-family: 'Fredoka', 'Quicksand', sans-serif; }
   overflow: hidden;
   touch-action: none;
 }
-.lienzo-capas .capa-guia,
 .lienzo-capas .capa-svg,
+.lienzo-capas .capa-guia-progreso,
 .lienzo-capas .capa-dibujo {
   position: absolute;
   inset: 0;
@@ -179,6 +179,7 @@ h1, h2 { font-family: 'Fredoka', 'Quicksand', sans-serif; }
   height: 100%;
 }
 .capa-svg svg { width: 100%; height: 100%; display: block; }
+.capa-guia-progreso { pointer-events: none; }
 
 .controles { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; justify-content: center; }
 

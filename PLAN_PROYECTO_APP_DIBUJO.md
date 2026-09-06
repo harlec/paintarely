@@ -211,9 +211,11 @@ Enfoque recomendado por fases:
 - El usuario dibuja libremente sobre el canvas superpuesto siguiendo la guía.
 - Al terminar, presiona "Finalizar trazo" → se habilita la paleta de colores.
 
-**Fase avanzada (v2, opcional):**
-- Detectar qué tan cerca sigue el usuario la guía usando distancia punto-a-punto entre lo dibujado y el `path` SVG (librería tipo `svg-path-properties` o cálculo manual con `getPointAtLength`).
-- Ir "revelando"/iluminando el segmento siguiente del trazo solo cuando el segmento actual se completó con cierta tolerancia.
+**Fase avanzada (implementada):**
+- Se calculan puntos a lo largo del `path.guia-trazo` con `getPointAtLength` (cálculo manual, sin librería externa) y se marcan como "cubiertos" cuando el trazo del usuario pasa cerca (tolerancia relativa al tamaño del lienzo).
+- Los puntos se pintan en rojo (sin cubrir) o verde (cubiertos) sobre una capa de canvas independiente, dando feedback visual inmediato.
+- El botón "Finalizar trazo" queda deshabilitado hasta cubrir al menos el 60% de la guía; un contador de porcentaje en vivo lo indica.
+- Pendiente opcional a futuro: revelar el trazo progresivamente en vez de mostrarlo completo desde el inicio (actualmente se muestra todo el camino punteado de una vez, no por segmentos).
 
 **Coloreado por zonas:**
 - Cada zona coloreable es un `<path>` cerrado con un `id` único, mapeado en el JSON `zonas_color` de la plantilla.

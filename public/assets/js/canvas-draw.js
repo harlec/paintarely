@@ -4,9 +4,12 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
 };
 
 (function () {
+  const UMBRAL_COMPLETADO = 0.6;
+
   const capas = document.getElementById('lienzoCapas');
   const capaSvg = document.getElementById('capaSvg');
   const canvas = document.getElementById('canvasDibujo');
+  const canvasGuia = document.getElementById('canvasGuia');
   const botonesPincel = document.querySelectorAll('.pincel-btn');
   const btnPincelesToggle = document.getElementById('btnPincelesToggle');
   const panelPinceles = document.getElementById('panelPinceles');
@@ -16,17 +19,26 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
   const btnLimpiar = document.getElementById('btnLimpiar');
   const btnGuardar = document.getElementById('btnGuardarDibujo');
   const pistaColorear = document.getElementById('pistaColorear');
+  const pistaProgreso = document.getElementById('pistaProgreso');
+  const porcentajeTrazo = document.getElementById('porcentajeTrazo');
   if (!capas || !canvas) return;
 
   const estado = window.PaintarelyEstado;
   const ctx = canvas.getContext('2d');
+  const ctxGuia = canvasGuia ? canvasGuia.getContext('2d') : null;
   let dibujando = false;
   let trazoFinalizado = false;
+  let puntosGuia = [];
 
   function ajustarTamano() {
     const rect = capas.getBoundingClientRect();
     canvas.width = rect.width;
     canvas.height = rect.height;
+    if (canvasGuia) {
+      canvasGuia.width = rect.width;
+      canvasGuia.height = rect.height;
+    }
+    dibujarPuntosGuia();
   }
 
   function posicionDesdeEvento(evento) {
@@ -38,12 +50,89 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
     };
   }
 
+  // --- Guía de trazo: puntos a lo largo de los <path class="guia-trazo"> ---
+  function prepararPuntosGuia() {
+    puntosGuia = [];
+    const paths = capaSvg.querySelectorAll('.guia-trazo');
+    paths.forEach((path) => {
+      const svg = path.ownerSVGElement;
+      const viewBox = svg && svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+        ? svg.viewBox.baseVal
+        : { x: 0, y: 0, width: 200, height: 200 };
+      const longitud = path.getTotalLength();
+      const numPuntos = Math.max(24, Math.round(longitud / 6));
+      for (let i = 0; i <= numPuntos; i++) {
+        const punto = path.getPointAtLength((i / numPuntos) * longitud);
+        puntosGuia.push({
+          u: (punto.x - viewBox.x) / viewBox.width,
+          v: (punto.y - viewBox.y) / viewBox.height,
+          cubierto: false,
+        });
+      }
+    });
+    actualizarProgreso();
+  }
+
+  function dibujarPuntosGuia() {
+    if (!ctxGuia) return;
+    ctxGuia.clearRect(0, 0, canvasGuia.width, canvasGuia.height);
+    puntosGuia.forEach((p) => {
+      const x = p.u * canvasGuia.width;
+      const y = p.v * canvasGuia.height;
+      ctxGuia.beginPath();
+      ctxGuia.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctxGuia.fillStyle = p.cubierto ? '#2dd4a7' : 'rgba(255,92,138,0.55)';
+      ctxGuia.fill();
+    });
+  }
+
+  function actualizarProgreso() {
+    if (puntosGuia.length === 0) {
+      // Plantilla sin guía definida: no bloquear al usuario.
+      if (btnFinalizar) btnFinalizar.disabled = false;
+      pistaProgreso?.setAttribute('hidden', '');
+      return;
+    }
+    const cubiertos = puntosGuia.filter((p) => p.cubierto).length;
+    const progreso = cubiertos / puntosGuia.length;
+    if (porcentajeTrazo) porcentajeTrazo.textContent = Math.round(progreso * 100) + '%';
+    if (btnFinalizar && !trazoFinalizado) {
+      btnFinalizar.disabled = progreso < UMBRAL_COMPLETADO;
+    }
+  }
+
+  function marcarPuntosCercanos(xPx, yPx) {
+    if (puntosGuia.length === 0 || !canvasGuia) return;
+    const tolerancia = canvasGuia.width * 0.045;
+    let huboCambios = false;
+    puntosGuia.forEach((p) => {
+      if (p.cubierto) return;
+      const dx = p.u * canvasGuia.width - xPx;
+      const dy = p.v * canvasGuia.height - yPx;
+      if (Math.sqrt(dx * dx + dy * dy) <= tolerancia) {
+        p.cubierto = true;
+        huboCambios = true;
+      }
+    });
+    if (huboCambios) {
+      dibujarPuntosGuia();
+      actualizarProgreso();
+    }
+  }
+
+  function reiniciarProgreso() {
+    puntosGuia.forEach((p) => { p.cubierto = false; });
+    dibujarPuntosGuia();
+    actualizarProgreso();
+  }
+
   function iniciarTrazo(evento) {
     if (trazoFinalizado) return;
     dibujando = true;
     const { x, y } = posicionDesdeEvento(evento);
     ctx.beginPath();
     ctx.moveTo(x, y);
+    marcarPuntosCercanos(x, y);
   }
 
   function continuarTrazo(evento) {
@@ -58,6 +147,7 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
     ctx.strokeStyle = estado.color;
     ctx.lineTo(x, y);
     ctx.stroke();
+    marcarPuntosCercanos(x, y);
   }
 
   function terminarTrazo() {
@@ -114,14 +204,17 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
 
   btnLimpiar?.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    reiniciarProgreso();
   });
 
   btnFinalizar?.addEventListener('click', () => {
+    if (btnFinalizar.disabled) return;
     trazoFinalizado = true;
     canvas.style.pointerEvents = 'none';
     btnFinalizar.disabled = true;
     panelPinceles?.setAttribute('hidden', '');
     btnPincelesToggle?.setAttribute('hidden', '');
+    pistaProgreso?.setAttribute('hidden', '');
     pistaColorear?.removeAttribute('hidden');
     if (btnGuardar) btnGuardar.disabled = false;
   });
@@ -131,6 +224,8 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
     .then((svgTexto) => {
       capaSvg.innerHTML = svgTexto;
       ajustarTamano();
+      prepararPuntosGuia();
+      dibujarPuntosGuia();
     });
 
   window.addEventListener('resize', ajustarTamano);

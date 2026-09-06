@@ -17,6 +17,7 @@
        data-plantilla-id="<?= (int) $plantilla['id'] ?>"
        data-svg-url="/assets/img/plantillas/<?= htmlspecialchars(basename($plantilla['svg_path'])) ?>">
     <div class="capa-svg" id="capaSvg"></div>
+    <canvas class="capa-guia-progreso" id="canvasGuia"></canvas>
     <canvas class="capa-dibujo" id="canvasDibujo"></canvas>
 
     <button type="button" id="btnPincelesToggle" class="fab-pinceles" title="Pinceles">
@@ -69,8 +70,10 @@
     </div>
   </div>
 
+  <p class="pista" id="pistaProgreso">Repasa el camino punteado ✏️ · <span id="porcentajeTrazo">0%</span></p>
+
   <div class="controles">
-    <button id="btnFinalizarTrazo" type="button">Finalizar trazo</button>
+    <button id="btnFinalizarTrazo" type="button" disabled>Finalizar trazo</button>
     <button id="btnLimpiar" type="button">Limpiar</button>
     <button id="btnGuardarDibujo" type="button" disabled>Guardar dibujo</button>
   </div>
