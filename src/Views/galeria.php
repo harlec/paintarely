@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="cabecera">
-  <h1>Paintarely</h1>
+  <h1>🎨 Paintarely</h1>
   <p>Escoge una plantilla para empezar a dibujar</p>
   <?php require BASE_PATH . '/src/Views/parciales/nav.php'; ?>
 </header>

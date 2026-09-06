@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="cabecera">
-  <h1>Paintarely</h1>
+  <h1>🎨 Paintarely</h1>
   <a href="/" class="volver">&larr; Volver a la galería</a>
 </header>
 
