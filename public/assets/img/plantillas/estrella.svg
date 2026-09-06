@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path id="zona-cuerpo" class="zona-color" fill="#ffffff" stroke="#333" stroke-width="2"
+        d="M100 20 L118 75 L178 75 L130 110 L148 168 L100 132 L52 168 L70 110 L22 75 L82 75 Z" />
+  <path id="zona-centro" class="zona-color" fill="#ffffff" stroke="#333" stroke-width="1.5"
+        d="M100 70 L108 95 L133 95 L112 110 L120 135 L100 120 L80 135 L88 110 L67 95 L92 95 Z" />
+  <path id="guia-trazo" class="guia-trazo" fill="none" stroke="#e63946" stroke-width="2"
+        stroke-dasharray="6 4" opacity="0.6"
+        d="M100 20 L118 75 L178 75 L130 110 L148 168 L100 132 L52 168 L70 110 L22 75 L82 75 Z" />
+</svg>

@@ -1,0 +1,5 @@
+.env
+/public/uploads/dibujos_usuarios/*
+!/public/uploads/dibujos_usuarios/.gitkeep
+.DS_Store
+*.log

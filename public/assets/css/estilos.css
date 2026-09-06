@@ -1,0 +1,123 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f7f5f2;
+  color: #222;
+}
+.cabecera {
+  padding: 1rem 1.25rem;
+  background: #264653;
+  color: #fff;
+}
+.cabecera h1 { margin: 0 0 .25rem; font-size: 1.25rem; }
+.cabecera .volver { color: #ffe066; text-decoration: none; }
+
+.nav-usuario {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-top: .5rem;
+  font-size: .9rem;
+}
+.nav-usuario a { color: #ffe066; text-decoration: none; }
+.nav-usuario .form-inline { display: inline; margin: 0; }
+.nav-usuario button {
+  padding: .2rem .6rem;
+  font-size: .8rem;
+  background: transparent;
+  border: 1px solid #ffe066;
+  color: #ffe066;
+}
+
+.formulario-wrap { display: flex; justify-content: center; padding: 2rem 1rem; }
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  width: min(100%, 360px);
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: .75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+.formulario label { display: flex; flex-direction: column; gap: .25rem; font-size: .9rem; }
+.formulario input {
+  padding: .5rem;
+  border: 1px solid #ccc;
+  border-radius: .4rem;
+  font-size: 1rem;
+}
+.formulario .error { color: #e63946; font-size: .85rem; margin: 0; }
+
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+}
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  padding: .75rem;
+  background: #fff;
+  border-radius: .75rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+}
+.tarjeta img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.tarjeta-nombre { font-weight: 600; }
+.tarjeta-nivel { font-size: .75rem; text-transform: uppercase; color: #888; }
+.vacio { padding: 1rem; color: #666; }
+
+.lienzo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+.lienzo-capas {
+  position: relative;
+  width: min(90vw, 480px);
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: .75rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  overflow: hidden;
+  touch-action: none;
+}
+.lienzo-capas .capa-guia,
+.lienzo-capas .capa-svg,
+.lienzo-capas .capa-dibujo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.capa-svg svg { width: 100%; height: 100%; display: block; }
+
+.controles, .paleta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+button {
+  padding: .6rem 1rem;
+  border: none;
+  border-radius: .5rem;
+  background: #2a9d8f;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+.paleta-swatches { display: flex; gap: .4rem; }
+.swatch {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+.swatch.activo { border-color: #264653; }
