@@ -194,24 +194,69 @@ h1, h2 { font-family: 'Fredoka', 'Quicksand', sans-serif; }
   width: min(90vw, 480px);
 }
 
-.pinceles { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; }
-.pincel-btn {
-  width: 3rem;
-  height: 3rem;
+.fab-pinceles {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  z-index: 5;
+  width: 2.9rem;
+  height: 2.9rem;
   padding: 0;
   border-radius: 50%;
+  background: var(--blanco);
+  box-shadow: 0 6px 16px rgba(74,63,92,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fab-pinceles[hidden] { display: none; }
+.fab-pinceles:hover { transform: scale(1.08) rotate(-6deg); }
+
+.panel-pinceles {
+  position: absolute;
+  top: 3.7rem;
+  right: .6rem;
+  z-index: 6;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  background: var(--blanco);
+  border-radius: 1.2rem;
+  padding: .9rem;
+  box-shadow: 0 10px 26px rgba(74,63,92,.3);
+}
+.panel-pinceles[hidden] { display: none; }
+
+.tipos-pincel { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; }
+.pincel-btn {
+  padding: .4rem;
+  border-radius: 1rem;
   background: #f4f0ff;
   box-shadow: inset 0 0 0 2px #ece4ff;
-  font-size: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--texto);
 }
-.pincel-btn:hover { transform: scale(1.08); box-shadow: inset 0 0 0 2px var(--menta); }
+.pincel-btn:hover { transform: scale(1.05); box-shadow: inset 0 0 0 2px var(--menta); }
 .pincel-btn.activo {
-  background: linear-gradient(135deg, var(--lila), var(--rosa));
+  background: linear-gradient(135deg, #f4ecff, #ffeaf1);
   box-shadow: 0 0 0 3px var(--lila-fuerte), 0 4px 10px rgba(0,0,0,.15);
+}
+
+.control-grosor { display: flex; align-items: center; gap: .6rem; }
+.grosor-preview {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--texto);
+  box-shadow: 0 0 0 2px #ece4ff;
+}
+.control-grosor input[type="range"] {
+  flex: 1;
+  accent-color: var(--lila-fuerte);
 }
 
 .pista {

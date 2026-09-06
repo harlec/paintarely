@@ -8,7 +8,10 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
   const capaSvg = document.getElementById('capaSvg');
   const canvas = document.getElementById('canvasDibujo');
   const botonesPincel = document.querySelectorAll('.pincel-btn');
-  const panelPinceles = document.getElementById('pinceles');
+  const btnPincelesToggle = document.getElementById('btnPincelesToggle');
+  const panelPinceles = document.getElementById('panelPinceles');
+  const sliderGrosor = document.getElementById('sliderGrosor');
+  const grosorPreview = document.getElementById('grosorPreview');
   const btnFinalizar = document.getElementById('btnFinalizarTrazo');
   const btnLimpiar = document.getElementById('btnLimpiar');
   const btnGuardar = document.getElementById('btnGuardarDibujo');
@@ -70,6 +73,13 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
   canvas.addEventListener('touchmove', continuarTrazo);
   canvas.addEventListener('touchend', terminarTrazo);
 
+  function actualizarPreviewGrosor() {
+    if (!grosorPreview) return;
+    const tamano = Math.max(6, Math.min(estado.pincel.grosor, 34));
+    grosorPreview.style.width = tamano + 'px';
+    grosorPreview.style.height = tamano + 'px';
+  }
+
   botonesPincel.forEach((boton) => {
     boton.addEventListener('click', () => {
       estado.pincel = {
@@ -79,7 +89,27 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
       };
       botonesPincel.forEach((b) => b.classList.remove('activo'));
       boton.classList.add('activo');
+      if (sliderGrosor) sliderGrosor.value = String(estado.pincel.grosor);
+      actualizarPreviewGrosor();
     });
+  });
+
+  sliderGrosor?.addEventListener('input', () => {
+    estado.pincel.grosor = Number(sliderGrosor.value);
+    actualizarPreviewGrosor();
+  });
+  actualizarPreviewGrosor();
+
+  btnPincelesToggle?.addEventListener('click', () => {
+    panelPinceles.hidden = !panelPinceles.hidden;
+  });
+
+  document.addEventListener('click', (evento) => {
+    if (!panelPinceles || panelPinceles.hidden) return;
+    if (panelPinceles.contains(evento.target) || evento.target === btnPincelesToggle || btnPincelesToggle?.contains(evento.target)) {
+      return;
+    }
+    panelPinceles.hidden = true;
   });
 
   btnLimpiar?.addEventListener('click', () => {
@@ -91,6 +121,7 @@ window.PaintarelyEstado = window.PaintarelyEstado || {
     canvas.style.pointerEvents = 'none';
     btnFinalizar.disabled = true;
     panelPinceles?.setAttribute('hidden', '');
+    btnPincelesToggle?.setAttribute('hidden', '');
     pistaColorear?.removeAttribute('hidden');
     if (btnGuardar) btnGuardar.disabled = false;
   });
