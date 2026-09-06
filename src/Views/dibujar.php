@@ -28,13 +28,22 @@
       <button type="button" class="pincel-btn" data-grosor="22" data-alfa="1" data-modo="borrador" title="Borrador">🧽</button>
     </div>
 
-    <div class="paleta-swatches" id="paletaSwatches">
-      <?php foreach (['#ffb3c6', '#ffd8a8', '#fff3a0', '#b9f5d0', '#a8e6ff', '#c9b8ff', '#ffffff', '#4a3f5c'] as $indice => $color): ?>
-        <button type="button" class="swatch<?= $indice === 0 ? ' activo' : '' ?>" style="background: <?= $color ?>" data-color="<?= $color ?>"></button>
-      <?php endforeach; ?>
-      <label class="swatch swatch-personalizado" title="Elige cualquier color">
-        <input type="color" id="colorPersonalizado" value="#ffb3c6" aria-label="Color personalizado">
-      </label>
+    <div class="fila-colores">
+      <div class="paleta-swatches" id="paletaSwatches">
+        <?php foreach (['#ffb3c6', '#ffd8a8', '#fff3a0', '#b9f5d0', '#a8e6ff', '#c9b8ff', '#ffffff', '#4a3f5c'] as $indice => $color): ?>
+          <button type="button" class="swatch<?= $indice === 0 ? ' activo' : '' ?>" style="background: <?= $color ?>" data-color="<?= $color ?>"></button>
+        <?php endforeach; ?>
+        <button type="button" class="swatch swatch-personalizado" id="btnColorPersonalizado" title="Elige cualquier color">🎨</button>
+      </div>
+
+      <div class="selector-espectro" id="selectorEspectro" hidden>
+        <canvas id="canvasEspectro" width="240" height="150"></canvas>
+        <div class="espectro-acciones">
+          <button type="button" id="btnGotero" class="boton-gotero" hidden>💧 Gotero</button>
+          <span class="espectro-preview" id="espectroPreview"></span>
+          <button type="button" id="btnCerrarEspectro" class="boton-cerrar">Listo</button>
+        </div>
+      </div>
     </div>
   </div>
 
